@@ -1,21 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hrolle <marvin@42lausanne.ch>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/03 17:15:42 by hrolle            #+#    #+#             */
-/*   Updated: 2022/01/03 17:30:21 by hrolle           ###   ########.fr       */
+/*   Created: 2022/01/03 22:36:02 by hrolle            #+#    #+#             */
+/*   Updated: 2022/01/03 22:36:02 by hrolle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-#define GET_NEXT_LINE_H
-
+#include "get_next_line.h"
+#include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#define BUFFER_SIZE	1000
-char	*get_next_line(int fd);
+#include <fcntl.h>
 
-#endif
+int	main(int argc, char **argv)
+{
+	(void)argc;
+	int	i = atoi(argv[2]);
+	int	fd = open(argv[1], O_RDONLY);
+
+	if (fd < 0)
+	{
+		printf("Le fichier n'as pas pu être ouvert");
+		return 0;
+	}
+	while (i > 0)
+	{
+		printf("%s", get_next_line(fd));
+		i--;
+	}
+	close(fd);
+	return 0;
+}
+		

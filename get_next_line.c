@@ -22,21 +22,24 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_strjoin(const char *s1, const char *s2)
+char	*ft_strljoin(const char *s1, const char *s2, int len)
 {
 	char	*str;
 	char	*ret;
 
 	if (!(s1 && s2))
 		return (0);
-	str = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+	str = malloc((ft_strlen(s1) + len + 1) * sizeof(char));
 	ret = str;
 	if (!str)
 		return (0);
 	while (*s1)
 		*(str++) = *(s1++);
-	while (*s2)
+	while (len > 0)
+	{
 		*(str++) = *(s2++);
+		len--;
+	}
 	*str = 0;
 	return (ret);
 }
@@ -113,15 +116,17 @@ char	*get_next_line(int fd)
 	static char	*line;
 	char		*tmp;
 	char		*ret_str;
-	char		buffer[BUFFER_SIZE + 1];
+	char		buf[BUFFER_SIZE + 1];
 	int			i;
 
+	i = 1;
 	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, 0, 0) < 0)
 	   return (NULL);	
-	if (!line || !ft_strchr(line, "\n"))
+	if (!line || !ft_strchr(line, '\n'))
 	{
-		while (!read(fd, buf, BUFFER_SIZE))
+		while (i > 0)
 		{
+			i = read(fd, buf, BUFFER_SIZE);
 			if (!line)
 				line = ft_strdup(buf);
 				if (!line)
@@ -129,17 +134,17 @@ char	*get_next_line(int fd)
 			else
 			{
 				tmp = line;
-				line = ft_strjoin(tmp, buf);
+				line = ft_strljoin(tmp, buf, i);
 				free(tmp);
 				if (!line)
 					return (NULL);
 			}
-			if (ft_strchr(buf, "\n"))
+			if (ft_strchr(buf, '\n'))
 				break;
 		}
 	}
 	i = 0;
-	while (line[i] && line[i] != "\n")
+	while (line[i] && line[i] != '\n')
 		i++;
 	ret_str = ft_substr(line, 0, i);
 	if (!ret_str)
