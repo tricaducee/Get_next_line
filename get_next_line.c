@@ -6,7 +6,7 @@
 /*   By: hrolle <marvin@42lausanne.ch>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 17:14:32 by hrolle            #+#    #+#             */
-/*   Updated: 2022/03/10 19:53:04 by hrolle           ###   ########.fr       */
+/*   Updated: 2022/03/10 20:29:11 by hrolle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,55 +110,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	s2[i] = 0;
 	return (s2);
 }
-/**
-char	*get_next_line(int fd)
-{
-	static char	*line;
-	char		*tmp;
-	char		*ret_str;
-	char		buf[BUFFER_SIZE + 1];
-	int			i;
 
-	i = 1;
-	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, 0, 0) < 0)
-	   return (NULL);	
-	if (!line || !ft_strchr(line, '\n'))
-	{
-		while (i > 0)
-		{
-			i = read(fd, buf, BUFFER_SIZE);
-			if (!i)
-				return (NULL);
-			if (!line)
-				line = ft_strldup(buf, i);
-				if (!line)
-					return (NULL);
-			else
-			{
-				tmp = line;
-				line = ft_strljoin(tmp, buf, i);
-				free(tmp);
-				if (!line)
-					return (NULL);
-			}
-			if (ft_strchr(buf, '\n'))
-				break;
-		}
-	}
-	i = 0;
-	while (line[i] && line[i] != '\n')
-		i++;
-	ret_str = ft_substr(line, 0, i);
-	if (!ret_str)
-		return (NULL);
-	tmp = line;
-	line = ft_strldup(tmp + i + 1, ft_strlen(tmp + i + 1));
-	free(tmp);
-	if (!line)
-		return (NULL);
-	return (ret_str);
-}
-**/
 char	*get_next_line(int fd)
 {
 	static char	**lines;
@@ -170,9 +122,11 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, 0, 0) < 0)
 		return (NULL);
 	if (!lines)
-		lines = malloc(1024 * sizeof(char*));
+	{
+		lines = malloc(1024 * sizeof(char *));
 		if (!lines)
 			return (NULL);
+	}
 	if (!lines[fd])
 	{
 		i = read(fd, buf, BUFFER_SIZE);
@@ -204,6 +158,3 @@ char	*get_next_line(int fd)
 		return (NULL);
 	return (ret_str);
 }
-
-		
-
