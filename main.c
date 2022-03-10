@@ -6,7 +6,7 @@
 /*   By: hrolle <marvin@42lausanne.ch>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 22:36:02 by hrolle            #+#    #+#             */
-/*   Updated: 2022/01/03 22:36:02 by hrolle           ###   ########.fr       */
+/*   Updated: 2022/01/04 19:25:54 by hrolle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ int	main(int argc, char **argv)
 
 	if (fd < 0)
 	{
-		printf("Le fichier n'as pas pu être ouvert");
+		printf("Le fichier n'as pas pu être ouvert\n");
 		return 0;
 	}
 	while (i > 0)
 	{
-		printf("%s", get_next_line(fd));
+		printf("%s\n", get_next_line(fd));
 		i--;
 	}
 	close(fd);
