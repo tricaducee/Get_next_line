@@ -6,11 +6,84 @@
 /*   By: hrolle <marvin@42lausanne.ch>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 17:14:32 by hrolle            #+#    #+#             */
-/*   Updated: 2022/03/11 20:18:42 by hrolle           ###   ########.fr       */
+/*   Updated: 2022/03/11 20:31:50 by hrolle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+size_t	ft_strlen(const char *s)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
+
+char	*ft_strljoin(const char *s1, const char *s2, int len)
+{
+	char	*str;
+	char	*ret;
+
+	if (!(s1 && s2))
+		return (0);
+	str = malloc((ft_strlen(s1) + len + 1) * sizeof(char));
+	ret = str;
+	if (!str)
+		return (0);
+	while (*s1)
+		*(str++) = *(s1++);
+	while (len > 0)
+	{
+		*(str++) = *(s2++);
+		len--;
+	}
+	*str = 0;
+	return (ret);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	while (*s)
+	{
+		if (*s == ((char)c))
+			return ((char *)s);
+		s++;
+	}
+	if (c == 0)
+		return ((char *)s);
+	return (0);
+}
+
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+{
+	size_t	i;
+
+	i = 0;
+	if (dstsize)
+	{
+		while (i < dstsize - 1 && src[i])
+		{
+			dst[i] = src[i];
+			i++;
+		}
+		dst[i] = 0;
+	}
+	return (ft_strlen(src));
+}
+
+char	*ft_strldup(const char *s1, int size)
+{
+	char	*p;
+
+	p = malloc((size + 1) * sizeof(char));
+	if (!p)
+		return (0);
+	ft_strlcpy(p, s1, size + 1);
+	return (p);
+}
 
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
@@ -37,47 +110,35 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	s2[i] = 0;
 	return (s2);
 }
-
-int	read_file(char **line, int fd)
-{
-	char		*tmp;
-	char		buf[BUFFER_SIZE + 1];
-	int			i;
-
-	if (!line[fd])
-	{
-		i = read(fd, buf, BUFFER_SIZE);
-		if (!i)
-			return (0);
-		line[fd] = ft_strldup(buf, i);
-		if (!line[fd] || !i)
-			return (0);
-	}
-	while (!ft_strchr(line[fd], '\n'))
-	{
-		i = read(fd, buf, BUFFER_SIZE);
-		if (!i)
-			return (0);
-		tmp = line[fd];
-		line[fd] = ft_strljoin(tmp, buf, i);
-		free(tmp);
-		if (!line[fd])
-			return (0);
-	}
-	return (1);
-}
-
 char	*get_next_line(int fd)
 {
 	static char	*lines[1024];
 	char		*tmp;
 	char		*ret_str;
+	char		buf[BUFFER_SIZE + 1];
 	int			i;
 
 	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, 0, 0) < 0)
 		return (NULL);
-	if (!read_file(lines, fd))
-		return (NULL);
+
+	if (!lines[fd])
+	{
+		i = read(fd, buf, BUFFER_SIZE);
+		lines[fd] = ft_strldup(buf, i);
+		if (!lines[fd] || !i)
+			return (NULL);
+	}
+	while (!ft_strchr(lines[fd], '\n'))
+	{
+		i = read(fd, buf, BUFFER_SIZE);
+		if (!i)
+			return (NULL);
+		tmp = lines[fd];
+		lines[fd] = ft_strljoin(tmp, buf, i);
+		free(tmp);
+		if (!lines[fd])
+			return (NULL);
+	}
 	i = 0;
 	while (lines[fd][i] && lines[fd][i] != '\n')
 		i++;
