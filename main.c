@@ -49,6 +49,7 @@ int main()
 		scanf("%d", &j);
 		if (j == 1)
 		{
+			l = 1;
 			while (l == 1)
 			{
 				printf("Tapez le nom de votre fichier: "); 
@@ -60,7 +61,10 @@ int main()
 					l = 1;
 				}
 				else
+				{
 					l = 0;
+					i++;
+				}
 			}
 			while (fichier[k])
 			{
