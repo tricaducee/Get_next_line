@@ -44,24 +44,24 @@ int	read_file(char **line, int fd)
 	char		buf[BUFFER_SIZE + 1];
 	int			i;
 
-	if (!*line)
+	if (!line[fd])
 	{
 		i = read(fd, buf, BUFFER_SIZE);
 		if (!i)
 			return (0);
-		*line = ft_strldup(buf, i);
-		if (!*line || !i)
+		line[fd] = ft_strldup(buf, i);
+		if (!line[fd] || !i)
 			return (0);
 	}
-	while (!ft_strchr(*line, '\n'))
+	while (!ft_strchr(line[fd], '\n'))
 	{
 		i = read(fd, buf, BUFFER_SIZE);
 		if (!i)
 			return (0);
-		tmp = *line;
-		*line = ft_strljoin(tmp, buf, i);
+		tmp = line[fd];
+		line[fd] = ft_strljoin(tmp, buf, i);
 		free(tmp);
-		if (!*line)
+		if (!line[fd])
 			return (0);
 	}
 	return (1);
@@ -69,26 +69,26 @@ int	read_file(char **line, int fd)
 
 char	*get_next_line(int fd)
 {
-	static char	*line;
+	static char	*lines[1024];
 	char		*tmp;
 	char		*ret_str;
 	int			i;
 
 	if (fd < 0 || BUFFER_SIZE < 1 || read(fd, 0, 0) < 0)
 		return (NULL);
-	if (!read_file(&line, fd))
+	if (!read_file(lines, fd))
 		return (NULL);
 	i = 0;
-	while (line[i] && line[i] != '\n')
+	while (lines[fd][i] && lines[fd][i] != '\n')
 		i++;
 	i++;
-	ret_str = ft_substr(line, 0, i);
+	ret_str = ft_substr(lines[fd], 0, i);
 	if (!ret_str)
 		return (NULL);
-	tmp = line;
-	line = ft_strldup(tmp + i, ft_strlen(tmp + i));
+	tmp = lines[fd];
+	lines[fd] = ft_strldup(tmp + i, ft_strlen(tmp + i));
 	free(tmp);
-	if (!line)
+	if (!lines[fd])
 		return (NULL);
 	return (ret_str);
 }
