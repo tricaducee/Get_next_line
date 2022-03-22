@@ -6,37 +6,11 @@
 /*   By: hrolle <marvin@42lausanne.ch>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 17:14:32 by hrolle            #+#    #+#             */
-/*   Updated: 2022/03/11 20:18:42 by hrolle           ###   ########.fr       */
+/*   Updated: 2022/03/22 17:18:27 by hrolle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	char		*s2;
-	unsigned int	i;
-	unsigned int	f_len;
-
-	if (!s)
-		return (0);
-	f_len = ft_strlen(s);
-	if (start >= f_len)
-		return (ft_strldup("", 0));
-	if (len > f_len - start)
-		len = f_len - start;
-	s2 = malloc((len + 1) * sizeof(char));
-	if (!s2)
-		return (0);
-	i = 0;
-	while (s[start + i] && i < len)
-	{
-		s2[i] = s[start + i];
-		i++;
-	}
-	s2[i] = 0;
-	return (s2);
-}
 
 int	read_file(char **line, int fd)
 {
@@ -50,7 +24,7 @@ int	read_file(char **line, int fd)
 		if (!i)
 			return (0);
 		*line = ft_strldup(buf, i);
-		if (!*line || !i)
+		if (!*line)
 			return (0);
 	}
 	while (!ft_strchr(*line, '\n'))
@@ -82,7 +56,7 @@ char	*get_next_line(int fd)
 	while (line[i] && line[i] != '\n')
 		i++;
 	i++;
-	ret_str = ft_substr(line, 0, i);
+	ret_str = ft_strldup(line, i);
 	if (!ret_str)
 		return (NULL);
 	tmp = line;
@@ -90,5 +64,10 @@ char	*get_next_line(int fd)
 	free(tmp);
 	if (!line)
 		return (NULL);
+	if (!line[0])
+	{
+		free(line);
+		line = NULL;
+	}
 	return (ret_str);
 }
