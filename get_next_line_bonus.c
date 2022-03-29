@@ -6,11 +6,11 @@
 /*   By: hrolle <marvin@42lausanne.ch>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 14:24:36 by hrolle            #+#    #+#             */
-/*   Updated: 2022/03/29 14:25:36 by hrolle           ###   ########.fr       */
+/*   Updated: 2022/03/29 18:04:52 by hrolle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	read_file(char **line, int fd)
 {

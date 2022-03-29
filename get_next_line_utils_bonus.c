@@ -6,11 +6,11 @@
 /*   By: hrolle <marvin@42lausanne.ch>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:06:44 by hrolle            #+#    #+#             */
-/*   Updated: 2022/03/29 17:06:47 by hrolle           ###   ########.fr       */
+/*   Updated: 2022/03/29 18:05:46 by hrolle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 size_t	ft_strlen(const char *s)
 {
