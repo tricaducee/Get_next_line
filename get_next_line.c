@@ -6,7 +6,7 @@
 /*   By: hrolle <marvin@42lausanne.ch>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 17:14:32 by hrolle            #+#    #+#             */
-/*   Updated: 2022/03/29 18:04:27 by hrolle           ###   ########.fr       */
+/*   Updated: 2022/03/29 19:39:34 by hrolle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,4 @@ char	*get_next_line(int fd)
 	if (!line)
 		return (NULL);
 	return (ret_str);
-
+}
