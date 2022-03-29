@@ -6,7 +6,7 @@
 /*   By: hrolle <marvin@42lausanne.ch>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/03 17:14:32 by hrolle            #+#    #+#             */
-/*   Updated: 2022/03/22 17:18:27 by hrolle           ###   ########.fr       */
+/*   Updated: 2022/03/29 14:24:03 by hrolle           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,25 +18,24 @@ int	read_file(char **line, int fd)
 	char		buf[BUFFER_SIZE + 1];
 	int			i;
 
-	if (!*line)
+	i = 1;
+	while (!ft_strchr(*line, '\n') && i)
 	{
 		i = read(fd, buf, BUFFER_SIZE);
-		if (!i)
+		if (i && !*line)
+			*line = ft_strldup(buf, i);
+		else if (i)
+		{
+			tmp = *line;
+			*line = ft_strljoin(tmp, buf, i);
+			free(tmp);
+		}
+		if (!*line || (!*line[0] && !i))
+		{
+			free(*line);
+			*line = NULL;
 			return (0);
-		*line = ft_strldup(buf, i);
-		if (!*line)
-			return (0);
-	}
-	while (!ft_strchr(*line, '\n'))
-	{
-		i = read(fd, buf, BUFFER_SIZE);
-		if (!i)
-			return (0);
-		tmp = *line;
-		*line = ft_strljoin(tmp, buf, i);
-		free(tmp);
-		if (!*line)
-			return (0);
+		}
 	}
 	return (1);
 }
@@ -55,7 +54,8 @@ char	*get_next_line(int fd)
 	i = 0;
 	while (line[i] && line[i] != '\n')
 		i++;
-	i++;
+	if (line[i])
+		i++;
 	ret_str = ft_strldup(line, i);
 	if (!ret_str)
 		return (NULL);
@@ -64,10 +64,5 @@ char	*get_next_line(int fd)
 	free(tmp);
 	if (!line)
 		return (NULL);
-	if (!line[0])
-	{
-		free(line);
-		line = NULL;
-	}
 	return (ret_str);
 }
